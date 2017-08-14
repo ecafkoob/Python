@@ -2,6 +2,7 @@ import numpy as np
 import urllib2
 import json
 import sys
+
 '''
 自己写的一个小工具，用于查找给定的基因名在entrze gene id，然后使用网站提供的api 获取有用的信息。
 '''
@@ -13,10 +14,10 @@ if __name__ == '__main__':
     res = np.loadtxt("jk.csv", dtype=int)
     outputStrings = []
     for i in range(start, start + geneLen):
-        print (i + 1), '/', len(res)
+        print(i + 1), '/', len(res)
         gids = res[i]
         url = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=gene&id=' + repr(gids) + '&retmode=json';
-        print url
+        print(url)
 
         data = json.load(urllib2.urlopen(url))
         geneId = str(gids)
