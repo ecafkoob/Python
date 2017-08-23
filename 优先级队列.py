@@ -28,3 +28,9 @@ q.push(Item('bar'), 5)
 q.push(Item('spam'), 4)
 q.push(Item('grok'), 1)
 print(q.pop())
+
+
+
+'''
+优先级队列是一个普通队列的定义加上了一个优先级，FIFO
+'''
