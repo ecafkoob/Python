@@ -9,4 +9,5 @@ def narcissistic(value):
     for i in range(0, l):
         a = int(strNum[i]) ** l
         sum = a + sum
-    print(sum == num)
+    return sum==num
+
