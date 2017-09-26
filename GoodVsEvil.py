@@ -20,4 +20,3 @@ def goodVsEvil(good, evil):
     if sumgood == sumbad:
         return "Battle Result: No victor on this battle field"
 
-    list.remove()
