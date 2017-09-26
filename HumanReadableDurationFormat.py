@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+# -*- coding:utf-8 -*-
+# Author:贾江超
+
+def format_duration(seconds):
+    YEARS = 31536000
+    DAYS = 86400
+    HOURS = 3600
+    MINS = 60
+    if seconds % YEARS == 0:
+        if int(seconds / YEARS) == 1:
+            return str(int(seconds / YEARS)) + ' year'
+        elif int(seconds / YEARS) == 0:
+            return 'now'
+        else:
+            return str(int(seconds / YEARS)) + ' years'
+    elif seconds > YEARS:
+        year = int(seconds / YEARS // 1)
+    else:
+        year = 0
+    if (seconds - YEARS * year) % DAYS == 0:
+
+        if int((seconds - YEARS * year) / DAYS // 1) == 1:
+            return str(int((seconds - YEARS * year) / DAYS // 1)) + ' day'
+        else:
+            return str(int((seconds - YEARS * year) / DAYS // 1)) + ' days'
+    elif (seconds - YEARS * year) > DAYS:
+        day = int((seconds - YEARS * year) / DAYS // 1)
+    else:
+        day = 0
+    if (seconds - YEARS * year - DAYS * day) % HOURS == 0:
+        if int((seconds - YEARS * year - DAYS * day) / HOURS // 1) == 1:
+            return str(int((seconds - YEARS * year - DAYS * day) / HOURS // 1)) + ' hour'
+        else:
+            return str(int((seconds - YEARS * year - DAYS * day) / HOURS // 1)) + ' hours'
+    elif seconds - YEARS * year - DAYS * day > HOURS:
+        hour = int((seconds - YEARS * year - DAYS * day) / HOURS // 1)
+    else:
+        hour = 0
+    if (seconds - YEARS * year - DAYS * day - HOURS * hour) % MINS == 0:
+        if int((seconds - YEARS * year - DAYS * day - HOURS * hour) / MINS // 1) == 1:
+            return str(int((seconds - YEARS * year - DAYS * day - HOURS * hour) / MINS // 1)) + ' minute'
+        else:
+            return str(int((seconds - YEARS * year - DAYS * day - HOURS * hour) / MINS // 1)) + ' minutes'
+    elif seconds - YEARS * year - DAYS * day - HOURS * hour > MINS:
+        mins = int((seconds - YEARS * year - DAYS * day - HOURS * hour) / MINS // 1)
+    else:
+        mins = 0
+    sec = seconds - YEARS * year - DAYS * day - HOURS * hour - MINS * mins
+    if year == 0 | day == 0 | hour == 0 | mins == 0:
+        if sec == 1:
+            return str(sec) + ' second'
+        else:
+            return str(sec) + ' seconds'
+    arr = [year, day, hour, mins, sec]
+    sample = ['year', 'day', 'hour', 'minute', 'second']
+    samples = ['years', 'days', 'hours', 'minutes', 'seconds']
+    count = 0
+    rearr = []
+    for i in arr:
+        if i == 1:
+            string = str(i) + ' ' + sample[count]
+            if sample[count] == 'day':
+                string = str(i) + ' ' + sample[count] + ', '
+            if sample[count] == 'hour':
+                string = str(i) + ' ' + sample[count] + ', '
+            if sample[count] == 'minute':
+                string = str(i) + ' ' + sample[count] + ' ' + 'and '
+
+            rearr.append(string)
+            count += 1
+        elif i > 1:
+            string = str(i) + ' ' + samples[count]
+            if sample[count] == 'days':
+                string = str(i) + ' ' + samples[count] + ', '
+            if sample[count] == 'hour':
+                string = str(i) + ' ' + samples[count] + ', '
+            if sample[count] == 'minutes':
+                string = str(i) + ' ' + samples[count] + ' ' + 'and '
+
+            rearr.append(string)
+            count += 1
+        else:
+            count += 1
+    return ''.join(rearr)
+
+
+
+format_duration(3601)
+
+
