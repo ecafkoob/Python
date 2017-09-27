@@ -12,4 +12,6 @@ def descendingOrder(value):
     list.sort(reverse=True)
     return int(re)
 
-Input: 1254859723 Output: 9875543221
+'''
+str[::-1] ok
+'''
