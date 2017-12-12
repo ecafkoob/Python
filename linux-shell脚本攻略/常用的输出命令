@@ -1,0 +1,156 @@
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/www.zzxxxc.cn/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/www.zzxxxc.cn/privkey.pem
+   Your cert will expire on 2018-02-04. To obtain a new or tweaked
+   version of this certificate in the future, simply run
+   letsencrypt-auto again. To non-interactively renew *all* of your
+   certificates, run "letsencrypt-auto renew"
+ - Your account credentials have been saved in your Certbot
+   configuration directory at /etc/letsencrypt. You should make a
+   secure backup of this folder now. This configuration directory will
+   also contain certificates and private keys obtained by Certbot so
+   making regular backups of this folder is ideal.
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+
+xargs 命令的用法：
+args.txt是一个参数表里面的每一条参数都会传递给 cecho.sh cecho.sh把接受到信息加一个#号再显示出来
+比如
+seq 9| xargs 可以把它显示再一行 加上 -n x 可以控制一行显示x个参数 -d 可以指定分割符 把类似
+123x456x789 这样的处理成 123 456 789
+
+   $ cat args.txt | xargs -I {} ./cecho.sh -p {} -l
+   -p arg1 -l #
+   -p arg2 -l #
+   -p arg3 -l #
+
+   这个xargs 经常和find 连用 比如我想把硬盘中所有的log 全列出来 然后把它们全copy到某个目录下
+   find -name "*.txt" -print | xargs -n 1 -I {}  cp {} /home/username 下
+
+find 命令 的一般用法 find . \( -name "*.html" -o -name "*.js" \) -print
+
+linux 文件的元信息 metadata 包括 访问时间  atime  mtime 修改时间 ctime 包括所有者信息的改变
+
+作为常识 Linux 一切皆文件 分为下面几类  文件f 目录d 块设备文件b 字符文件c 链接文件l 套接字文件
+s 还有fifo 管道文件
+
+find 的时候可以加上 -type 文件种类 精确过滤文件
+-xtime 单位是天
+-xmin 单位是分钟
+-newer 那一个文件当参考
+
+find -delete 可以直接把找到的文件删除慎用 这玩意不用确认的。。
+用tr 可以把结果字符串形式进行过滤
+echo “hello 123 world 456” | tr -d "0-9"
+
+uptime
+平均负载是系统总负载量的一个重要参数。它指明了系统中可运行进程总量的平均值。
+平均负载由三个值来指定,第一个值指明了1分钟内的平均值,第二个值指明了5分钟内
+的平均值,第三个值指明了15分钟内的平均值
+1min 5min 15min
+lshw 显示cpu缓存信息 主板固件信息 显示系统 所有硬件信息
+
+
+计划任务定时任务这个面试必考啊
+crontab -e 可以编辑那个cron 表 系统会在相应的时间执行相应的动作 执行脚本运行命令等等
+时间顺序按单位从小到大 很好记
+分 时 日 月 工作日 命令。如果使用 *占位符表示 每个单位都会执行 在分钟的位置上就表示每分钟执行 别的位置
+类似
+
+号( * )指定命令应该在每个时间段执行。也就是说,如果 * 是写在 cron 作业中的小时字
+段中,那么命令就会每小时执行一次。与此类似,如果你希望在某个特定时段执行命令,那么就
+在对应的时间字段中指定时段,并用逗号分隔(例如要在5分钟和10分钟时运行命令,那就在分
+钟字段中输入 "5,10" )。还有另一个不错的选项可以让我们以特定的时间间隔运行命令。在分钟
+字段使用 */5 ,可以每5分钟运行一次命令。这个技巧可以用在任何时间字段。
+env 当前用户的所有环境变量
+set
+
+zcat 直接读取.gz文件内容输出到stedou zabbix 创建mysql schema的时候用的就是 zcat
+
+tar 在功能上被设计为归档程序 就是把一坨文件变成一个文件但是没有压缩
+-c（小写）表示create file
+-f specify filename 指定文件名
+-v verbose 详细模式 冗长模式 一般命令里面-v都是显示详细信息用的。
+-r 添加一个文件到归档文件中
+-x 提取文件 -c指定解压文件的路径 跟压缩包里面的文件名表示只解压指定文件，所有的解压命令都有这个性质
+
+tar 的高端玩法 tar cvf - filename/ | ssh username@hostname "tar xv -C destnationPath/"
+这个user必须是拥有创建相应文件（目录）权限的才行 否则执行失败
+
+
+gzip 是一个压缩程序 但是他只能 把单个文件压缩 解压用gunzip
+zip 同上解压用unzip
+现在一般用tar -xf 解压 tar -czf 归档压缩文件
+
+有个例子  file_jpg="sample.jpg"
+        name=${file_jpg%.*}
+        echo $name 显示 sample
+
+        这里%还可以换成%% 表示贪婪匹配
+        关于贪婪和非贪婪搜索 区别在于找到特定模式后是否尝试继续寻找
+        比如 我的filename=hello.world.txt echo ${filename%.*} 是 hello.world
+        然而我把 %换成%%结果就变成了 hello
+
+        这个%就是从右向左匹配 '.' 找到然后删除右边的内容
+
+        #与%类似 从左往右匹配 然后操作一样
+rename 命令常用来改变文件的大小写 比如我的照片的格式写成.JPG我需要批量把它变成小写就可以用rename ‘y/A-Z/a-z/ *
+’ * 匹配当前目录下的所有文件
+
+shell下的一些变量含义 $0 $1-$n $# $@ $* $? $$ 代表第n个参数是什么 0 是脚本的名字 1-n依次类推
+# 参数总数 @是参数列表 *也是参数列表 ？ 表示上一条命令的执行状态 0 成功 非0 失败
+常用来判断命令是否成功执行
+有时你需要将十六进制的shellcode输入的缓冲区溢出的地方 可以用echo -e 命令 保留原格式进行把想输出
+的内容输出到相应的地方
+$$ 当前进程PID
+
+shell 获取输入通过read -p 的方式可以指定变量名存储内容
+
+现在接触到的两个设备文件 一个是 dev/null ；另一个是 dev/zero 前一个就是一个把数据吃进去的黑洞
+后者是产生\0 数据的 一般用于产生数据块
+
+dd if=/dev/zero of=junkdata.data bs=100M count=100 这可以产生10G大的一个垃圾文件
+
+
+利用多线程加速命令执行
+#/bin/bash
+#文件名: generate_checksums.sh
+PIDARRAY=()
+for file in File1.iso File2.iso
+do
+md5sum $file &
+PIDARRAY+=("$!")
+done
+wait ${PIDARRAY[@]}
+
+Unix将操作系统中的一切都视为文件。所有操作都离不开文件,可以利用它们进行各种与系
+统或进程相关的处理工作。例如,我们所使用的命令终端就是和一个设备文件关联在一起的。我
+们可以通过写入特定终端所对应的设备文件来实现向终端写入信息。文件的形式多种多样,比如
+目录、普通文件、块设备、字符设备、符号链接、套接字和命名管道等。文件名、大小、文件类
+型、文件内容修改时间、文件访问时间、文件属性更改时间、i节点、链接以及文件所在的文件
+系统等都是文件的属性。本章包含的实战攻略涉及文件相关的操作及属性。
+
+关于环境变量的问题
+/etc/environment
+export 设置环境变量
+通过/etc/profile 设置环境变量
+改 .bashrc .shrc .zshrc 添加环境变量
+
+
+
+
+
+- PHABRICATOR_HOST: 127.0.0.1
+- PHABRICATOR_USERNAME: curacloud
+- PHABRICATOR_PASSWORD: Welcome123!
+- HABRICATOR_EMAIL: admin@keyayun.com
+- PHABRICATOR_FIRSTNAME: FirstName
+- PHABRICATOR_LASTNAME: LastName
+- MARIADB_USER: root
+- MARIADB_PASSWORD: Welcome123!
+- MARIADB_HOST: mariadb
+- MARIADB_PORT_NUMBER: 3306

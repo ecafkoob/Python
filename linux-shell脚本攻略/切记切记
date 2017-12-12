@@ -1,0 +1,55 @@
+进行关键配置的时候一定要记得备份关键配置文件 否则连个退回的选项都没了
+
+
+apt-get update &&
+apt-get install -y language-pack-en-base &&
+export LC_ALL=en_US.UTF-8 &&
+export LANG=en_US.UTF-8 &&
+apt-get install -y software-properties-common &&
+add-apt-repository -y ppa:ondrej/php5-5.6 &&
+add-apt-repository -y ppa:ondrej/mariadb-10.0 &&
+apt-get update &&
+apt-get -y upgrade
+
+locale-gen en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+phabricator 不支持php 7
+
+
+CREATE USER 'dog'@'localhost' IDENTIFIED BY '123456';
+CREATE USER 'pig'@'192.168.1.101_' IDENDIFIED BY '123456';
+CREATE USER 'pig'@'%' IDENTIFIED BY '123456';
+CREATE USER 'pig'@'%' IDENTIFIED BY '';
+CREATE USER 'pig'@'%';
+
+GRANT privileges ON databasename.tablename TO 'username'@'host'
+
+phabricator 进行mysql 设置的时候默认不允许使用root 账号链接
+
+这个东西可以用 ldap slack
+
+client 端的php 建议7.1 需要php7.1-curl Ubuntu 有apt install arcanist 直接安装
+
+arc diff
+arc list
+arc cover
+arc patch
+arc export
+arc amend
+arc branch
+
+head 当前版本
+head^ 上一个版本
+head^^ 上上个版本
+head～100 就是前第100个版本
+head～n 就是前n个版本
+
+
+这个harbormaster 就是个jinkins 就是那个搞 CI的
+
+
+
+apache2 virtualHost 设置的时候先把配置文件写到 site-enable 里面 然后 a2esite 然后service apache2 reload
+真的麻烦 我选择 nginx  

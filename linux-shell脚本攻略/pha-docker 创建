@@ -1,0 +1,118 @@
+docker network create pha-tier  创建docker 网络层
+docker volume create mysql-data 创建 mysql 数据卷
+docker volume create pha-data 创建 pha 数据卷
+
+
+
+
+
+docker 数据保存 用数据卷的的方式 因为1 vloume  方便备份 2 容易迁移 3 支持windows 和 linux
+4 可以通过api 进行管理  5 volume 驱动可以把数据保存在本地 云端 各种能存储数据的地方
+
+安装openssh-server  nano
+配置phabricator ssh  设置账号权限 等等
+
+ln -s /opt/bitnami/php/bin/php /usr/bin/php；mkdir /var/run/sshd；chmod 0755 /var/run/sshd
+
+
+邮件设置
+Adapter: SMTP
+You can use this adapter to send mail via an external SMTP server, like Gmail. To do this, set these configuration keys:
+
+metamta.mail-adapter smtp
+phpmailer.mailer: smtp.gmail.com
+phpmailer.smtp-host: smtp.gmail.com.
+phpmailer.smtp-port: 465
+phpmailer.smtp-user: a654747873@gmail.com
+phpmailer.smtp-password: jjc
+phpmailer.smtp-protocol: ssl
+phpmailer.smtp-encoding: Normally safe to leave as the default, but adjusting it
+may help resolve mail mangling issues (for example, mail arriving with too many
+or too few newlines).
+
+不支持中文文件名
+
+phabricator.base-uri https://pha.curacloudplatform.com:9180/
+
+ALL=(root) SETENV: NOPASSWD: /opt/bitnami/git/bin/git-upload-pack, /opt/bitnami/git/bin/git-receive-pack， /opt/bitnami/git/bin/git
+
+metamta.mail-adapter PhabricatorMailImplementationAmazonSESAdapter
+
+
+
+amazon-ses.endpoint email.us-east-1.amazonaws.com
+
+
+email-smtp.us-east-1.amazonaws.com
+
+
+metamta.mail-adapter PhabricatorMailImplementationPHPMailerAdapter
+phpmailer.mailer smtp
+phpmailer.smtp-host email-smtp.us-east-1.amazonaws.com
+phpmailer.smtp-port 587
+phpmailer.smtp-user AKIAJDAWDGCOXA5YKBGA
+phpmailer.smtp-password Arr0GxBGQKm9Z63f5kAf0xmLFx2hFX1Kqn1ZPXt6woeu
+phpmailer.smtp-protocol tls
+
+nginx 报错都要很长时间 说明不管是 磁盘io 还是 cpu io 都沾满了
+356 MB
+146 MB
+2.661GB
+157 MB
+
+
+每一次 arc diff 提交的时候 会有 50M内存的使用  然后 ab压测的时候 模拟1000用户访问
+
+[mysqld]
+max_allowed_packet=16M
+sql_mode=STRICT_ALL_TABLES
+innodb_buffer_pool_size=1600M
+
+
+
+
+Backup: MySQL Databases
+Most of Phabricator's data is stored in MySQL, and it's the most important thing to back up. You can run bin/storage dump to get a dump of all the MySQL databases. This is a convenience script which just runs a normal mysqldump, but will only dump databases Phabricator owns.
+
+Since most of this data is compressible, it may be helpful to run it through gzip prior to storage. For example:
+
+phabricator/ $ ./bin/storage dump | gzip > backup.sql.gz
+Then store the backup somewhere safe, like in a box buried under an old tree stump. No one will ever think to look for it there.
+
+Restore: MySQL
+To restore a MySQL dump, just pipe it to mysql on a clean host. (You may need to uncompress it first, if you compressed it prior to storage.)
+
+$ gunzip -c backup.sql.gz | mysql
+
+设置阿里云rds
+./config set mysql.host rm-m5e93hg2hmigl13bb.mysql.rds.aliyuncs.com \
+./config set mysql.user pha \
+./config set mysql.pass phabricator_123 \
+./config set storage.default-namespace bitnami_phabricator
+
+原来的配置
+./config set mysql.host rm-m5e93hg2hmigl13bb.mysql.rds.aliyuncs.com
+./config set mysql.user phabricator
+./config set mysql.pass phabricator_123
+./config set storage.default-namespace phabricator
+
+./config set mysql.host 128.199.218.124 \
+./config set mysql.user pha \
+./config set mysql.pass phabricator_123 \
+./config set storage.default-namespace bitnami_phabricator
+
+
+
+每次重启需要做的事情  /usr/sbin/sshd -f /etc/ssh/sshd_config.phabricator
+                  ./opt/bitnami/phabricator/bin/phd start
+
+
+gunzip -c backupNew.sql.gz | mysql -hrm-m5e93hg2hmigl13bb.mysql.rds.aliyuncs.com -upha -p 密码 phabricator_123
+gunzip -c backup.sql.gz | mysql -hrm-m5e93hg2hmigl13bb.mysql.rds.aliyuncs.com -uphabricator -pphabricator_123
+
+
+
+
+
+
+有几点 需要说清楚
