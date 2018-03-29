@@ -1,0 +1,27 @@
+1 常用的重定向符 < 表示把后面文件流的内容传到 当前stdout 中
+2 > 把当前的内容重定向到 指定的 文件中
+3 经常看到的 1 2 都是文件描述符 1表示正常的stdout 2 表示stderr
+4 tee 从stdin 获得信息显示到stdout 和文件中 一般的重定向只会去一个 stdout 或者文件 tee -a 是append
+5 exec 3<filename 把内容存到3 中， cat  <&3
+6 计算函数运行耗时 可以用date +%N 来计算 开始的时候算一下 结束的时候算一下 单位纳秒 除以10^6后的单位是秒
+7 for i in {1..10}
+  do
+    exp
+  done
+函数的定义
+function fname() {}
+set -x 在执行时显示参数和命令
+set +x 禁止调试
+set -v 命令进行读取时显示输入
+set +v 禁止打印输入
+
+shell 参数的问题 $@ 把参数变成一个列表每一个都是一个字符串
+用的多
+
+用一段代码来理解下 shell的函数 :() { :|:& };:
+相当精典
+shell 的函数成功执行返回0 否则返回非零数 可以通过执行完hanshu
+用 echo $? 查看
+
+向shell 传递命令 比如 rsync -azvp
+可以写成rsync -a -z -v -p
