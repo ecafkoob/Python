@@ -1,0 +1,28 @@
+今天定个小目标：把Linux Shell 脚本攻略这本书刷完。定期十天，这个主要是提升自己的shell 编程功底。DevOps你连脚本都不会写，那还指望什么呢。
+道理就是这个道理，多写才能长进。书中的例子会随着笔记一起提交。shell 脚本的主要作用就是通过shell语言，通过简单的逻辑完成一些自动化的任务。
+
+1 shebang 就是告诉操作系统 使用那个解释器来解析这个脚本
+2 常用的输出命令 echo 和 printf，这个pringf 就是c 里面那个格式化输出语句，支持
+ %d %c %s 等等这些占位符 比如%-5d %-10s %-4.2f - 表示左对齐 后面的数字表示宽度
+ .点后面的表示小数的位数f 表示这是个浮点数
+3 比较有趣的是 echo显示彩色字体：echo -e "\e[1;31m sometext \e[0m" 31 红的 32 绿的 34 蓝的
+4 有一点特别特别关键 赋值的时候 a="123" 在判断相等的时候 a = b，太鸡儿关键了
+5 当要使用变量的时候 有两种方法 $var 和 ${var} 都可以的，最标准的是 ${var}
+6 echo 双引号中的变量会被解析 而单引号中的会被原样输出 双引号中的变量如果没有定义则 显示以空格
+7 那种有长度的变量string，数字等等 可以用  #变量名 获得长度
+
+其中 参数是变量的超集 参数可以是数字 以及数字开头的字符串 而变量遵守变量定义的规则，实际上这个变量扩展就是处理了变量空值的问题。
+官方定义：
+${parameter:-word}
+If parameter is unset or null, the expansion of word is substituted. Otherwise, the value of parameter is substituted.
+
+${parameter:=word}
+If parameter is unset or null, the expansion of word is assigned to parameter. The value of parameter is then substituted. Positional parameters and special parameters may not be assigned to in this way.
+
+${parameter:?word}
+If parameter is null or unset, the expansion of word (or a message to that effect if word is not present) is written to the standard error and the shell, if it is not interactive, exits. Otherwise, the value of parameter is substituted.
+
+${parameter:+word}
+If parameter is null or unset, nothing is substituted, otherwise the expansion of word is substituted.
+
+-为空使用后面的值 =为空把word的值赋给给parma ？报错 +parma非空的话把word加上去
