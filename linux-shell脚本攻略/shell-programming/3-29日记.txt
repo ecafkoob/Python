@@ -1,7 +1,7 @@
 1 常用的重定向符 < 表示把后面文件流的内容传到 当前stdout 中
 2 > 把当前的内容重定向到 指定的 文件中
 3 经常看到的 1 2 都是文件描述符 1表示正常的stdout 2 表示stderr
-4 tee 从stdin 获得信息显示到stdout 和文件中 一般的重定向只会去一个 stdout 或者文件 tee -a 是append
+4 tee 从stdin 获得信息显示到stdout 和文件中 一般的重定向只会去一个 stdout 或者文件 tee -a 是append. tee 后面直接跟文件名 不要用重定向符
 5 exec 3<filename 把内容存到3 中， cat  <&3
 6 计算函数运行耗时 可以用date +%N 来计算 开始的时候算一下 结束的时候算一下 单位纳秒 除以10^6后的单位是秒
 7 for i in {1..10}
@@ -25,3 +25,35 @@ shell 的函数成功执行返回0 否则返回非零数 可以通过执行完ha
 
 向shell 传递命令 比如 rsync -azvp
 可以写成rsync -a -z -v -p
+比如我们常见的 $(command) 就是子shell的用法 可以在里面 放一个 由管道符串联起来的命令
+这个() 实际上就是启动了一个子shell
+这个() 牛逼了 比如我在 pwd;(cd /bin;ls;pwd) 可以用子shell 去除\n 也就是换行符
+
+比如我要写个无限循环的函数 那他应该是这个样子的
+repeat() {while :;do $@ && return;done }
+这个函数 可以这么用 repeat wget -c url
+掌握了一个高端机巧 就是IFS内部文件分隔符 就是awk 里面的分隔符 这个牛逼之处在于 shell 把一些通过特定符号隔开的
+字符串啊数据什么的按照我们的需求处理
+举个例子
+data="name,sex,age,gander,id"
+IFS=","
+for x in data;do echo -e "\e[1;34m Item: $x \e[0m" ;done
+
+那个shell 支持c风格的for 语句 for ((i=0;i<10;i++));do  lalala ;done
+
+while condition ;do balala ;done
+
+until 一直循环直到条件成立
+
+shell 中条件的比较 [ $var -ne 0 -a $var -ge 10 ]  比较运算符 -ge -le -ne -gt -lt 方括号里面
+可以用 -a 代替&& -o 代替 ||
+[ -f $file_var ] 包含文件路径或者文件名 true
+[ -x $var ]
+[ -d $var ]
+[ -e $var ]
+现在问题来了
+Linux 文件分类 x c b L d 还有按照读写权限 w r
+
+&& 当左边成功执行 才回执行右边的语句
+|| 只有当左侧不成功才回执行右边的语句 那么判断的依据就是( $? !=0  )
+
