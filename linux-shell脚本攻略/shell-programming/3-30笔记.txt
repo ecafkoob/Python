@@ -1,0 +1,22 @@
+1 cat可以将多个文件的内容连一起显示出来 cat -s 会把相邻的空行合并成一个空行 cat -T把文件中的tab 显示成一个符号
+cat -n 给内容带上行号 cat -b 跳过空行
+2 shell 命令录像 script -t 2> timing.log -a out.session   播放录像 scriptplay timing.log out.session
+3 重头戏来了 find locate 推荐使用locate locate 这个会生成一个本地的数据库查询起来超快. find 如果在服务器中可能造成cpu的压力
+find 最基本的用法 find 加 搜索的起始路径 -name 或者 -iname "*.conf" 一个正则模式
+3.1 find / \( -name "" -o -name "" \) -print 可以把各种后缀的文件过滤出来
+3.2 find -name -path -regex 都可以 name 按文件名搜索 path 按路径搜索 regex 按正则搜索
+3.3 find -maxdepth 这个是搜索的深度 如果设置1 则搜索起点那一层 2的话则搜起点层加起点层的下一层的文件及文件夹
+3.4 find / -maxdepth 1 -print
+3.5 find -type -d -c -b -l -f -s -p
+3.6 find -atime -ctime -mtime 最后一次访问时间 变化时间主要是元数据的改变 最后一次修改时间 后面跟数字 -表示时间点之前
+    没符号就是那一天 +表示那一天之后
+3.7 find -amin -cmin -mmin 与上面的类似 不过单位改成了分钟   还有一个重要的时间点 -newer 添上这个可以找比制定文件创建早的文件
+3.8 find -size 按照大小查找 后面跟大小 7k 8M 9G 6w(字) c(字节) b(512字节)
+3.9 find -regex -iregex find . -iregex ".*\(\.txt\|\.py\)$"
+4.0 find 某个选项前面加! 表示去补集
+4.1 find 条件 最后加上 -delete 删除找到的文件
+4.2 find -perm 777 添加权限这一条限制
+4.3 find -user 添加用户这一条规则
+4.4 find 加-exec  一般 -exec 和{} 这个一起用 这个就关系到 那个IFS 了 如果你指定了IFS的话 那就按照IFS 把每个结果提取出来
+4.5 find 跳过一些不需要的文件夹 find / \( -name "\etc" -prune \) -o \( -type f -name ".txt" \) 这个跳过了 /etc的文件夹
+
