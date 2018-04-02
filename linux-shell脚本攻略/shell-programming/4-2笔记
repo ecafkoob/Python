@@ -1,0 +1,76 @@
+1 xargs 这个命令最基本的用法 就是对内容的格式进行处理 比如把find出来的结果 进行处理 -d 表示 指定分隔符 -n 表示多少个字符串一组
+比如把 1x2x3x4x 通过xargs 变成 1 2 3 4
+2 xargs -I {} 这两个一起用可以把从stdin 拿来的数据做简单处理 然后放到定的位置上
+3 用find 加 xargs 统计文本的行数 find / -type f -name "*.txt" -print0 | xargs -0 wc -l
+4 tr (translate) 可以把指定字符串的内容用 一个 集合里面的通过另一个集合的来替换
+5 例如 echo "HELLO WORLD" | tr 'A-Z' 'a-z'
+6 把某个 字符替换成 别的字符 这个还是通过grep 完成比较好 tr '\t' ' ' < file.txt
+7 tr 删除字符串 cat file.txt | tr -d ' [set1] ' 这个set1 制定了被删除的字符集
+8 比如echo "Hello 123 world 456" | tr -d '0-9'
+9 还有就是 -d -c 这两个连用 -d 是删除 -c 是使用指定字符集的补集 举个例子 echo "hi 1 jack 2 ma 3" | tr -d -c '0-9 \n'
+10 还有就是用tr -s 删除重复的字符,比如echo "GNUUUUUU   is       not     UNIX,right?" | tr -s ' [ U] '
+11 tr 可以用 一些字符集的类名: lower upper alnum alpha cntrl digit graph print punct space xdigit
+这也是集合 用法和tr -d -c '[:className:]'
+
+
+校验与核实
+
+1 md5sum filename 最基本的用法  可以MD5sum filename > record.log
+2 md5sum file1 file2 file3 > record.log
+3 md5sum -c record.log 可以检查记录文件中的各个文件的MD5sum 是否和计算出来的一致
+4 shasum sha1sum 还有一坨 什么 512 256 384 224 shaXsum
+5 md5deep -rl path > log.MD5 可以对目录下的文件进行递归计算校验和 当然可以通过find 加xargs 来实现
+  find . -type f -print0 | xargs -0 MD5sum >> log.md5
+
+文件排序 唯一 与重复
+1 sort 命令 -n 一般用在该字段开头是数字的情况 比如 1a 2b 3c 4d 则样的一排 -k 用于指定哪一列 还有排序的的规则和
+  Local= xx 这个环境变量有关
+  *** WARNING ***
+  The locale specified by the environment affects sort order.
+  Set LC_ALL=C to get the traditional sort order that uses
+  native byte values.
+2 uniq 可以去除重复的行 uniq -u 显示去重完成后的 uniq -c 统计重复的数量 -d 找出重复的行
+3 uniq -z filelist.txt | xargs -0 rm -f
+
+
+临时文件相关
+1 mktemp -d 创建临时目录 mktemp 创建临时文件在/tmp 文件夹下面 mktemp -u 就创建一个临时文件名
+2 还可以自定义临时文件的名字 mktemp test.XXX aaa.XXXX 这个XXX就是占位符 mktemp 随机生成数字和字母填充
+ 所有的临时文件在重启会被清除
+
+分割文件和数据
+1  要制造指定大小的文件的话可以用dd if=/dev/zero of=path bs=块大小 count=块的个数 这玩意也可以拿来创建启动光盘
+2 split -b 按照大小分割文件 -d -a 4 生成文件的前缀
+3 split -l 按照行数分割文件
+
+根据扩展名割分文件名
+1 聚个栗子 file_name="sample.jpg"; name=${file_name%.*} 这个把那个字符串 以.为起点向右的全部删除 就留下文件名了
+2 file_name#*. file_name字符串 以点为中心向左的全删了
+
+3 %从正则的角度来说是从右向左匹配 直到找到分界符 .
+  %%在这一块 和% 类似不过是贪婪匹配 比如 var=hack.book.is.fun.txt  % 只会删掉txt 而 %% 只会留hack
+
+4 #则是从左向右匹配 一直到找到标识符
+  ## 贪婪匹配 类似
+  简记就是 % 留文件名 # 留文件后缀
+
+批量重命名和移动
+1 主要是通过 find rename mv 这三个连用
+2 可以把某个后缀的文件名移动到一个文件夹中
+3 find -exec 配合 rename 重命名符合条件的相关文件
+
+
+grep 相关 "^$1$" 表示匹配 参数列表第一个 来做匹配 写脚本会有用 -q 安静模式不会有任何输出到stdout
+
+shell 并行执行命令的框架
+
+#! /bin/bash
+PIDARRAY=()
+for item in $1 $2 $3;
+do
+  md5sum $item &
+  PIDARRAY+=("$!")
+done
+wait ${PIDARRAY[@]}
+
+
