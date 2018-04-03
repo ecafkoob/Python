@@ -1,0 +1,20 @@
+1 chmod u g o filename
+2 chown
+3 chattr
+4 chgrp
+5 touch -a 只修改文件访问时间
+6 touch -m 只更改文件修改该时间
+7 touch -d "Fri Jun 25 20:50:14 IST 1999" filename
+
+符号链接及其指向目标
+符号连接
+ln -s target symbolic_link_name
+ln -l -s /var/www/ ~/web
+
+ls -l web
+
+
+文件信息类
+1 file 查看简单的文件信息 几乎没啥用
+2 stat 与file 类似 比file 强 这个可以查看的东西就很多了  amc time
+3
