@@ -43,4 +43,20 @@ seq 10 | grep 5 -C 3  2345678 以5为标志 前三行后三行
 
 cat 的兄弟 cut (bullshit)
 
-
+Important!!!
+!!!关键1 还有一个问题就是sed 中的{} 还有() + 也需要  这个需要被转义 要不然sed 不能正确处理.比如 s/x{3}//g 这个需要用\转义
+sed
+1 最基本的用法 sed 's/pattern/replaces/Ng'
+2 sed 可以自定义定界符 比如 是s///g s:::g s???g 都可以
+3 sed -i 是直接把修改应用到文件中 有个好习惯是 sed -i .bak some operations 这样在改之前会把源文件备份
+4 sed 's/^$/g' filename
+5 sed '/pattern/d' 删除丿匹配到的模式
+6 sed 可以以单词文最小粒度匹配like this: echo "11 111 ab111cd" | sed 's/\b[0-9]\{3\}/xxx/g'
+  这个例子可以看出 正则里面的边界限定符 比如\b 这些就是为了防止误伤友军 上述例子只会把 111 干掉 而藏在abcd
+  包围中的则没有问题 如果没有边界限定符的话 abcd 中的也会被干掉
+7 这个正则里面也有 & 这个就像find -exec {} 里面那个一样 用于指代匹配出来的东西
+  echo this is file | sed 's/\w\+/[&]/g'
+8 字串匹配标记 (\1)
+  echo this is digital 7 in a number | sed 's/digital \([0-9]\)/\1'
+  !!!important 每一个用() 配配出来的字串 用法就是 \1 \2 \3 ... \n 每一个  (pattern1) (pattern2)
+  到(patternN) 匹配出的东西可以用于重组 string 这个和 & 一起用 很厉害
