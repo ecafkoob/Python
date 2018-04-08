@@ -1,0 +1,25 @@
+重点 文件操作相关
+1 列出当前目录下的所有目录 ls -d */
+2 ls -F | grep "/$" 正则表达式 表示以/结尾
+3 ls -l | grep "^d" 同上以d 开头 喵呀
+4 find . -maxdepth 1 -type d  -print
+
+高端技巧来了
+通过使用一个存放文件路径的栈来访问路径
+1 pushd 把路径存到栈中 从0开始 到n pushd +n 直接跳转到
+2 popd 可以删除一些路径
+
+统计行数的工具 wc 我草
+1 wc -l 查行数
+2 wc -w 查单词数
+3 wc -c 字符数
+4 wc -L 最长的一行的长度
+5 wc 什么都不加 行数 单词数 字符数
+
+tree 通过树状图的形式把文件和文件夹列出来
+
+1 最基本的 tree path
+2 tree path -p "*.sh" 筛选出出符合 模式的
+3 tree path -I "*.conf" 不显示 包含模式的路径 上面那个取补集
+4 tree -h 显示文件和目录的大小
+5 tree 最后面加上 -o filename.html 可以生成目录的 HTML页面
