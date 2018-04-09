@@ -1,0 +1,44 @@
+awk
+1 awk脚本的结构 awk 'BEGIN{ statement } pattern { command } END{ statement }'
+2 可以用 '' 包住程序 可以用""
+3 用awk 统计文件行数 awk 'BEGIN{i=0}{i++}END{print i}'
+4 讲道理 写awk 程序的时候没必要加辣么多的空格必要的不可省略
+5 比如 echo -e "line1\nline2" | awk 'BEGIN{print "start"}{print}END{print "END"}'
+6 一些内置变量
+  NR 是 number of line record 每往下一行 NR+1
+  NF 是 number of field record  每往右一列 NF+1
+
+7 可以直接指定列号 $0 指代当前这一行的内容 $1 第一个字段的内容 $2 第二字段 $3 依次类推
+8 将外部变量传给awk
+9 VAR=1000
+10 awk -v variable=$VAR '{print variable}'
+11 var1="somestring1"
+12 还可以echo | awk '{print v1,v2}' v1=$var1 v2=$var2
+13 awk 可以用getline 获得指定顶行的内容 seq 5 | awk 'BEGIN{getline;print something ahead first line}{print $0}'
+14 awk 'NR<5' 这样干是可以的 awk 'NR==1,NR==4' 表示处理1到4行 awk '/regex/'
+15 awk -F: 'print $NF' /etc/passwd 比如用:分割/etc/passwd 可以用NF-1 NF-2 这样查看每一字段的内容
+16 撸个花活 echo | awk '{"grep root /etcpasswd" | getline cmdout ;print cmdout}'
+   这个例子牛逼之处在于他从shell的stdout 获得输入 然后再输出出来 还运行了shell 命令
+17 awk 可以用length(string) 获得字符串长度 index(string,substring) 返回子串位置 从1开始
+18 写shell的时候要养成先检查参数个数的好习惯:
+   if [ $# -ne 参数个数 ];
+   then
+      echo "你错了 检查参数个数"
+      echo "usage : $0 filename"
+      exit -1
+   fi
+19 cat paste 都是用于连接文件的 不同之处在于 cat 把新来的通过行的方式加在下面 而paste把新的文件按照列的方式添在
+   原文件的右边etc cat 1.txt  1\n2\n3 cat 2.txt 4\n5\n6 cat 是 1\n2\n3\n4\n5\n6 而paste 1 2\n3 4\n5 6\n
+20 把一个文件的内容=倒序 有个简单的办法 tac 他和 cat 倒序...
+   seq 5 | tac ===== seq 5 | awk '{lifo[NR]=$0}{for (lno=NR;lno>-1;lno--){print lifo[lno]}}'
+   写这个脚本的时候有个坑 就是如果不加END的话就会出错 逻辑是我们必须完成所有行的遍历 才有了完整的关联数组
+
+
+在文件中已除包含某个单词的句子
+
+sed 's/ [^.]*mobile phones[^.]*\.//g'
+
+比如我要批量修改所有cpp源文件文件的copyright 变成copyleft
+find . -iname "*.cpp" -print0 | xargs -I{} -0 sed -i 's///g' {}
+find . -iname "*.cpp" -exec sed -i 's///g' \{\} \;
+find . -iname "*.cpp" -exec sed -i 's///g' \{\} \+
