@@ -42,3 +42,23 @@ sed 's/ [^.]*mobile phones[^.]*\.//g'
 find . -iname "*.cpp" -print0 | xargs -I{} -0 sed -i 's///g' {}
 find . -iname "*.cpp" -exec sed -i 's///g' \{\} \;
 find . -iname "*.cpp" -exec sed -i 's///g' \{\} \+
+
+文本切片及参数操作
+1 shell 的文本替换  var="this is a fucking words" ; echo ${var/a/an}
+2 shell ${var:5} 这个是上面的一个特例 以5当start pos 这是左闭右开的区间
+3 和啪桑的切片差不多
+
+wget 下载文件 wget -P savepath url.filename
+
+curl
+curl url --silent  静默
+curl url --progress
+curl url.filename -o afuckinglocalfilename
+curl 断点续传 curl -C - url
+curl -d 发送数据
+curl -x 声明类型
+curl -b 发送cookie 信息
+curl -c cookie 信息保存到文件
+curl url --user-agent
+curl -I 显示头信息
+
