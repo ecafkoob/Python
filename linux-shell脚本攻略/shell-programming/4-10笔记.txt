@@ -1,0 +1,30 @@
+文件备份操作相关
+tar命令
+模式 tar ops 归档文件名 (input/output)filename
+1 tar归档不压缩 tar -cf  create file
+2 tar列出归档文件的内容 tar -tf
+3 -v 选项 显示详细信息 -f form file
+4 -r 想归档文件中添加内容
+5 -x exact 解压文件
+6 -C 大写 指定解压目录
+7 tar -zxf filename 从压缩文件中解压指定文件
+8 有个很秀的操作 tar cvf - file/folder | ssh somehost "tar -xv -C path"
+9 tar -Af append from   etc.  tar -Af file1.tar file2.tar 把后面的添到前面的文件中去
+10  tar -uf 比较时间戳如果时间戳相同则不添加,如果想要添加的文件比较新则添加
+11  tar -tvf 显示归档文件中的详细信息,就和类似ls -al 一样
+12 tar -df 可以比较归档文件中的文件信息和系统中文件的差异
+13 tar -f archive.tar --delete file1 file2 从归档文件中删除文件
+14 还有一些压缩比比较高但是速度比较慢的 或者不常用的
+15 常识 gzip 后缀 .gz . bzip2 后缀 bz2 tar 里面 对应的 -c gzip 压缩 -j bzip2压缩
+16 还有zip win unix 都用 zip 压缩 unzip 解压
+17 zip 目标文件 原文件
+18 如果有必要可以自己装pbzip2 通过多线程加速压缩的过程 巨大的原文件需要通过CPU的多线程加速压缩
+
+rsync 常用命令
+-a 进行归档
+-z 传输过程压缩
+-v 显示详细信息
+-P 保持权限
+
+有一点是符号链接的问题 如果我rsync的 文件夹包含链接 而他指的东西又不存在
+--delete 删除那些目标有而源没有的多出来的文件
