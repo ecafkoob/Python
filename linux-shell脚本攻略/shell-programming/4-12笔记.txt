@@ -1,0 +1,36 @@
+网络相关命令
+1 查看网络接口 子网掩码 ifconfig ,ip addr
+2 手动设置网络接口的IP地址 ifconfig wlan0 iPaddress
+3 ifconfig netinterface ipaddress netmask
+4 dhclient interface
+5 curl ifconfig.me 获取本机公网ip 不建议用这个是日本樱花vps做的服务器外网访问很慢
+6 host 会列出某个域名的所有IP nslookup 查看DNS 信息 dig 查看dns 缓存信息
+7 DNS的本地记录拥有最高优先级
+8 route 查看Linux 内核维护的路由表 -n 的话把主机名解析成ip地址的形式
+9 ping 命令查看网络是否联通 ttl 表示一个在网络上传播的数据包在经过多少设备后被丢弃 rtt round trip time 往返时间
+10 mtr 实时显示数据包经过的所有网关地址 用于判断网络线路质量
+ssh 无密登陆
+1 创建密钥对
+2 把自己的公钥给服务器 用ssh-copy-id 就行 手动添实在太愚蠢了
+3 ssh 用于端口转发 ssh -L 8000: A-Url:80 username@localhost 这个是把本机8000 端口信息转发到 A-url的80 端口上
+4 ssh -L 443: target-ip:port username@REMOTEHOST
+上面是交互式的 就是转发的时候有个shell 窗口
+
+我们需要的是后台默认进行的
+ssh -fL 8000:target-ip:80 username@somehost -N　后台正向代理
+ssh -R 8000:localhost:80 user@REMOTE_MACINE 反向代理
+正向代理: 我通过ssh -L 9000:localport 1.1.1.1:90 remote 使用场景是不想暴露自己信息　对外只是一个　代理的IP shadowsocks 了解下
+反向代理: 一般有负载均衡的作用　如果我有一个
+ 　
+网络流量和端口分析
+
+查看端口和服务之间的关系 lsof -i | grep ":[0-9]\+" -o| grep "[0-9]\+" -o | sort | uniq
+使用nc这个神器 最简单的用法
+sever nc -l 1234 > receive
+client nc host 123 < sendfile
+
+iptables 最简单的用法拿来当做防火墙 iptables -A OUTPUT -d 8.8.8.8 -j DROP -A 是append 一个规则到output链的最后 -d 作用的ip -j 说操
+做是 丢弃
+-dport 21 禁止端口  可以加一个 -p 指明协议类型
+
+ iptables --flush 恢复原始样子
